@@ -228,7 +228,7 @@ git commit -m "feat: parse and chunk supported documents"
 - `VectorStore.upsert(chunks: list[EmbeddedChunk]) -> None`, `delete_document(document_id: str) -> None`, and `search(knowledge_base_id: str, vector: list[float], limit: int) -> list[VectorHit]`.
 - Produces upload/list/process/retry/delete document endpoints and statuses `pending`, `processing`, `ready`, `failed`.
 
-- [ ] **Step 1: Write failing lifecycle and ingestion tests using deterministic fakes**
+- [x] **Step 1: Write failing lifecycle and ingestion tests using deterministic fakes**
 
 ```python
 def test_ingestion_marks_ready_only_after_vectors_are_written(session, fake_embedder, fake_store, uploaded_document):
@@ -245,19 +245,19 @@ def test_ingestion_failure_is_retryable(session, failing_embedder, fake_store, u
     assert uploaded_document.error_code == "EMBEDDING_FAILED"
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_documents.py tests/test_ingestion.py -v`
 
-- [ ] **Step 3: Implement provider protocols, Bailian embedding batching, Qdrant adapter, and lifecycle transaction**
+- [x] **Step 3: Implement provider protocols, Bailian embedding batching, Qdrant adapter, and lifecycle transaction**
 
 Batch at most 10 texts per `text-embedding-v4` request. Store Qdrant payload fields `knowledge_base_id`, `document_id`, `chunk_id`, `position`, and `content`. On retry, delete stale chunks and vectors before reprocessing.
 
-- [ ] **Step 4: Verify GREEN and deletion consistency**
+- [x] **Step 4: Verify GREEN and deletion consistency**
 
 Run: `cd backend; python -m pytest tests/test_documents.py tests/test_ingestion.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests

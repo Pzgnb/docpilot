@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -29,6 +30,9 @@ class Settings(BaseSettings):
     )
     database_url: str = Field(
         default="sqlite:///./data/docpilot.db", validation_alias="DATABASE_URL"
+    )
+    storage_dir: Path = Field(
+        default=Path("./data/uploads"), validation_alias="STORAGE_DIR"
     )
     qdrant_url: str = Field(
         default="http://127.0.0.1:6333", validation_alias="QDRANT_URL"

@@ -4,9 +4,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.health import router as health_router
+from app.api.documents import router as documents_router
 from app.api.knowledge_bases import router as knowledge_bases_router
 from app.core.config import Settings, get_settings
 from app.db.base import Base, Database
+from app.services.bailian import BailianEmbeddingProvider
+from app.services.vector_store import QdrantVectorStore
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -24,8 +27,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     application = FastAPI(title="DocPilot API", version="0.1.0", lifespan=lifespan)
     application.state.settings = resolved_settings
+    application.state.embedding_provider = (
+        BailianEmbeddingProvider(
+            api_key=resolved_settings.bailian_api_key,
+            base_url=resolved_settings.bailian_base_url,
+            model=resolved_settings.embedding_model,
+        )
+        if resolved_settings.model_configured
+        else None
+    )
+    application.state.vector_store = QdrantVectorStore(resolved_settings.qdrant_url)
     application.include_router(health_router)
     application.include_router(knowledge_bases_router)
+    application.include_router(documents_router)
     return application
 
 

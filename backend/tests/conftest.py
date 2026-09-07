@@ -13,6 +13,7 @@ def client(tmp_path) -> Iterator[TestClient]:
         _env_file=None,
         BAILIAN_API_KEY="",
         DATABASE_URL=f"sqlite:///{tmp_path / 'test.db'}",
+        STORAGE_DIR=str(tmp_path / "uploads"),
     )
     with TestClient(create_app(settings)) as test_client:
         yield test_client
