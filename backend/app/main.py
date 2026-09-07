@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.health import router as health_router
+from app.api.knowledge_bases import router as knowledge_bases_router
 from app.core.config import Settings, get_settings
 from app.db.base import Base, Database
 
@@ -24,6 +25,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application = FastAPI(title="DocPilot API", version="0.1.0", lifespan=lifespan)
     application.state.settings = resolved_settings
     application.include_router(health_router)
+    application.include_router(knowledge_bases_router)
     return application
 
 

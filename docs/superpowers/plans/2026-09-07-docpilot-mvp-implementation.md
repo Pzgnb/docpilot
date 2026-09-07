@@ -119,7 +119,7 @@ git commit -m "feat: establish backend foundation"
 - Produces: `POST /api/knowledge-bases`, `GET /api/knowledge-bases`, `GET /api/knowledge-bases/{id}`, and `DELETE /api/knowledge-bases/{id}`.
 - Produces: `KnowledgeBaseRead(id: UUID, name: str, description: str, document_count: int, created_at: datetime, updated_at: datetime)`.
 
-- [ ] **Step 1: Write failing CRUD behavior tests**
+- [x] **Step 1: Write failing CRUD behavior tests**
 
 ```python
 def test_create_and_list_knowledge_base(client):
@@ -135,21 +135,21 @@ def test_duplicate_name_returns_conflict(client):
     assert client.post("/api/knowledge-bases", json=payload).status_code == 409
 ```
 
-- [ ] **Step 2: Run the tests and verify RED**
+- [x] **Step 2: Run the tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_knowledge_bases.py -v`
 
 Expected: requests return 404 because the router does not exist.
 
-- [ ] **Step 3: Implement SQLAlchemy model, schemas, and CRUD router**
+- [x] **Step 3: Implement SQLAlchemy model, schemas, and CRUD router**
 
 Use UUID strings as primary keys, trim names, reject empty names, and convert duplicate-name database errors into `KNOWLEDGE_BASE_EXISTS` with HTTP 409.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run: `cd backend; python -m pytest tests/test_knowledge_bases.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests/test_knowledge_bases.py
