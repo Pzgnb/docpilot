@@ -373,7 +373,7 @@ git commit -m "feat: answer with verified citations"
 - Error values: `none`, `not_retrieved`, `ranked_too_low`, `answer_omission`, `wrong_citation`, `wrong_refusal`.
 - Produces create/list/delete case endpoints and `POST /api/evaluations/run` returning totals, pass rate, and per-case results.
 
-- [ ] **Step 1: Write failing tests for every error category**
+- [x] **Step 1: Write failing tests for every error category**
 
 ```python
 @pytest.mark.parametrize(
@@ -391,19 +391,19 @@ def test_error_classification(evaluation_fixtures, fixture_name, expected_error)
     assert evaluate_case(case, response, trace).error_type == expected_error
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_evaluation.py tests/test_evaluation_api.py -v`
 
-- [ ] **Step 3: Implement rules, persistence, batch execution, and ten synthetic demo cases**
+- [x] **Step 3: Implement rules, persistence, batch execution, and ten synthetic demo cases**
 
 Pass requires the expected document in the configured top rank, all required keywords in the answer, only expected citations, and the expected refusal decision. Store the retrieval trace for every failure.
 
-- [ ] **Step 4: Verify GREEN and full backend regression suite**
+- [x] **Step 4: Verify GREEN and full backend regression suite**
 
 Run: `cd backend; python -m pytest -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests sample-data

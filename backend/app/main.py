@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from app.api.health import router as health_router
 from app.api.chat import router as chat_router
 from app.api.documents import router as documents_router
+from app.api.evaluations import router as evaluations_router
 from app.api.knowledge_bases import router as knowledge_bases_router
 from app.api.retrieval import router as retrieval_router
 from app.core.config import Settings, get_settings
@@ -67,6 +68,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.include_router(documents_router)
     application.include_router(retrieval_router)
     application.include_router(chat_router)
+    application.include_router(evaluations_router)
     return application
 
 

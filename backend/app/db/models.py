@@ -114,11 +114,51 @@ class ChatRecord(Base):
     )
 
 
+class EvaluationCaseRecord(Base):
+    __tablename__ = "evaluation_cases"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=lambda: str(uuid4())
+    )
+    knowledge_base_id: Mapped[str] = mapped_column(
+        ForeignKey("knowledge_bases.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    question: Mapped[str] = mapped_column(Text, nullable=False)
+    expected_decision: Mapped[str] = mapped_column(String(30), nullable=False)
+    expected_file_name: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    required_keywords: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    expected_top_rank: Mapped[int] = mapped_column(Integer, default=3, nullable=False)
+    expected_citation_ids: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, nullable=False
+    )
+
+
+class EvaluationRunRecord(Base):
+    __tablename__ = "evaluation_runs"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=lambda: str(uuid4())
+    )
+    knowledge_base_id: Mapped[str] = mapped_column(
+        ForeignKey("knowledge_bases.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    total: Mapped[int] = mapped_column(Integer, nullable=False)
+    passed: Mapped[int] = mapped_column(Integer, nullable=False)
+    pass_rate: Mapped[float] = mapped_column(nullable=False)
+    results: Mapped[list[dict]] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, nullable=False
+    )
+
+
 __all__ = [
     "Base",
     "ChatRecord",
     "Document",
     "DocumentChunk",
+    "EvaluationCaseRecord",
+    "EvaluationRunRecord",
     "KnowledgeBase",
     "RetrievalTraceRecord",
 ]

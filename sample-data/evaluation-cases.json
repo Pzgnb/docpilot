@@ -1,0 +1,12 @@
+[
+  {"question":"退款期限多久？","expected_decision":"answer","expected_file_name":"产品手册.md","required_keywords":["30天"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"删除项目后还能恢复吗？","expected_decision":"answer","expected_file_name":"产品手册.md","required_keywords":["回收站","30天"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"邀请链接有效几天？","expected_decision":"answer","expected_file_name":"产品手册.md","required_keywords":["7天"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"连续输错几次密码会锁定？","expected_decision":"answer","expected_file_name":"账号安全.md","required_keywords":["5次","30分钟"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"如何重置密码？","expected_decision":"answer","expected_file_name":"账号安全.md","required_keywords":["手机号","邮箱"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"支持上传哪些文档格式？","expected_decision":"answer","expected_file_name":"产品手册.md","required_keywords":["PDF","DOCX"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"普通成员能恢复已删除项目吗？","expected_decision":"answer","expected_file_name":"权限说明.md","required_keywords":["管理员"],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"公司今年年终奖是多少？","expected_decision":"insufficient_context","expected_file_name":null,"required_keywords":[],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"明天北京天气怎么样？","expected_decision":"insufficient_context","expected_file_name":null,"required_keywords":[],"expected_top_rank":3,"expected_citation_ids":[]},
+  {"question":"董事长的手机号码是什么？","expected_decision":"insufficient_context","expected_file_name":null,"required_keywords":[],"expected_top_rank":3,"expected_citation_ids":[]}
+]
