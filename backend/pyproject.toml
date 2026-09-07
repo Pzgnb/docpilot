@@ -10,6 +10,8 @@ requires-python = ">=3.11,<3.13"
 dependencies = [
   "fastapi==0.116.1",
   "pydantic-settings==2.10.1",
+  "pypdf==6.0.0",
+  "python-docx==1.2.0",
   "sqlalchemy==2.0.43",
   "uvicorn[standard]==0.35.0",
 ]
@@ -24,3 +26,6 @@ dev = [
 addopts = "-ra"
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

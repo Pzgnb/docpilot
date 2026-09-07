@@ -170,7 +170,7 @@ git commit -m "feat: add knowledge base management"
 - Produces: `chunk_text(text: str, document_id: str, chunk_size: int = 600, overlap: int = 100) -> list[TextChunk]`.
 - `TextChunk` fields: `id`, `document_id`, `position`, `content`, `char_start`, `char_end`.
 
-- [ ] **Step 1: Write failing parser tests for TXT, Markdown, DOCX, PDF, and unsupported files**
+- [x] **Step 1: Write failing parser tests for TXT, Markdown, DOCX, PDF, and unsupported files**
 
 ```python
 @pytest.mark.parametrize("fixture_name", ["sample.txt", "sample.md", "sample.docx", "sample.pdf"])
@@ -185,15 +185,15 @@ def test_parse_rejects_executable(tmp_path):
         parse_document(path, "application/octet-stream")
 ```
 
-- [ ] **Step 2: Run parser tests and verify RED**
+- [x] **Step 2: Run parser tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_parsing.py -v`
 
-- [ ] **Step 3: Implement format-specific extraction without OCR**
+- [x] **Step 3: Implement format-specific extraction without OCR**
 
 Use UTF-8 decoding for TXT/Markdown, `python-docx` for DOCX paragraphs and tables, and `pypdf` for text-layer PDFs. Normalize repeated whitespace while preserving paragraph boundaries.
 
-- [ ] **Step 4: Write and run failing chunk boundary tests**
+- [x] **Step 4: Write and run failing chunk boundary tests**
 
 ```python
 def test_chunks_are_ordered_and_overlap():
@@ -202,11 +202,11 @@ def test_chunks_are_ordered_and_overlap():
     assert [c.position for c in chunks] == [0, 1]
 ```
 
-- [ ] **Step 5: Implement chunking and verify all parser/chunk tests**
+- [x] **Step 5: Implement chunking and verify all parser/chunk tests**
 
 Run: `cd backend; python -m pytest tests/test_parsing.py tests/test_chunking.py -v`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add backend/app/services backend/tests
