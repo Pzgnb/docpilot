@@ -66,7 +66,7 @@ docpilot/
 **Interfaces:**
 - Produces: `create_app() -> FastAPI`, `Settings`, `get_session()`, and `GET /api/health` returning `status`, `database`, `qdrant`, and `models`.
 
-- [ ] **Step 1: Write failing configuration and health tests**
+- [x] **Step 1: Write failing configuration and health tests**
 
 ```python
 def test_settings_allows_local_start_without_bailian_key(monkeypatch):
@@ -81,17 +81,17 @@ def test_health_reports_database_without_exposing_secrets(client):
     assert "api_key" not in response.text.lower()
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_config.py tests/test_health.py -v`
 
 Expected: collection fails because `backend.app` modules do not exist.
 
-- [ ] **Step 3: Implement the minimal app, settings, SQLite session, and health route**
+- [x] **Step 3: Implement the minimal app, settings, SQLite session, and health route**
 
 Use `pydantic-settings` with `BAILIAN_API_KEY`, `BAILIAN_BASE_URL`, `BAILIAN_WORKSPACE_ID`, `CHAT_MODEL`, `EMBEDDING_MODEL`, `RERANK_MODEL`, `DATABASE_URL`, and `QDRANT_URL`. The API key and workspace ID are optional at startup. Return `models: "configured"` only when the API key is non-empty; never return either value.
 
-- [ ] **Step 4: Verify GREEN and start the API once**
+- [x] **Step 4: Verify GREEN and start the API once**
 
 Run: `cd backend; python -m pytest -v`
 
@@ -99,7 +99,7 @@ Run: `cd backend; python -m uvicorn app.main:app --host 127.0.0.1 --port 8000`
 
 Verify: `Invoke-RestMethod http://127.0.0.1:8000/api/health` returns HTTP 200.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add .gitignore .env.example backend
