@@ -11,6 +11,20 @@ class RerankError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class AnswerContext:
+    chunk_id: str
+    document_id: str
+    file_name: str
+    content: str
+
+
+@dataclass(frozen=True)
+class GeneratedAnswer:
+    answer: str
+    citation_ids: list[str]
+
+
+@dataclass(frozen=True)
 class EmbeddedChunk:
     id: str
     knowledge_base_id: str
@@ -35,6 +49,12 @@ class EmbeddingProvider(Protocol):
 
 class RerankProvider(Protocol):
     def rerank(self, query: str, documents: list[str]) -> list[float]: ...
+
+
+class ChatProvider(Protocol):
+    def answer(
+        self, question: str, contexts: list[AnswerContext]
+    ) -> GeneratedAnswer: ...
 
 
 class VectorStore(Protocol):

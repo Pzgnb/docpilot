@@ -1,9 +1,15 @@
+import json
 from typing import Any
 
 import httpx
 from openai import OpenAI
 
-from app.services.providers import EmbeddingError, RerankError
+from app.services.providers import (
+    AnswerContext,
+    EmbeddingError,
+    GeneratedAnswer,
+    RerankError,
+)
 
 
 class BailianEmbeddingProvider:
@@ -80,3 +86,49 @@ class BailianRerankProvider:
             raise
         except Exception as exc:
             raise RerankError("Rerank request failed") from exc
+
+
+class BailianChatProvider:
+    def __init__(
+        self,
+        *,
+        api_key: str,
+        base_url: str,
+        model: str,
+        client: Any | None = None,
+    ) -> None:
+        self.client = client or OpenAI(api_key=api_key, base_url=base_url)
+        self.model = model
+
+    def answer(
+        self, question: str, contexts: list[AnswerContext]
+    ) -> GeneratedAnswer:
+        context_text = "\n\n".join(
+            f"[chunk_id={context.chunk_id}]\n{context.content}"
+            for context in contexts
+        )
+        response = self.client.chat.completions.create(
+            model=self.model,
+            temperature=0,
+            response_format={"type": "json_object"},
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "你是企业知识库问答助手。只能依据给定资料回答，不得补充资料外事实。"
+                        "输出JSON，且仅包含answer字符串和citation_ids字符串数组。"
+                        "citation_ids只能使用资料中出现的chunk_id。"
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": f"问题：{question}\n\n资料：\n{context_text}",
+                },
+            ],
+        )
+        content = response.choices[0].message.content or "{}"
+        payload = json.loads(content)
+        return GeneratedAnswer(
+            answer=str(payload.get("answer", "")).strip(),
+            citation_ids=[str(value) for value in payload.get("citation_ids", [])],
+        )

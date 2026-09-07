@@ -29,3 +29,21 @@ class FakeVectorStore:
         self, knowledge_base_id: str, vector: list[float], limit: int
     ) -> list[VectorHit]:
         return []
+
+
+class FakeChatProvider:
+    def __init__(self, citation_ids: list[str] | None = None) -> None:
+        self.calls = 0
+        self.citation_ids = citation_ids
+
+    def answer(self, question, contexts):
+        from app.services.providers import GeneratedAnswer
+
+        self.calls += 1
+        citation_ids = self.citation_ids
+        if citation_ids is None:
+            citation_ids = [context.chunk_id for context in contexts[:1]]
+        return GeneratedAnswer(
+            answer="退款期限为30天。",
+            citation_ids=citation_ids,
+        )
