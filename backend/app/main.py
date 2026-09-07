@@ -6,9 +6,10 @@ from fastapi import FastAPI
 from app.api.health import router as health_router
 from app.api.documents import router as documents_router
 from app.api.knowledge_bases import router as knowledge_bases_router
+from app.api.retrieval import router as retrieval_router
 from app.core.config import Settings, get_settings
 from app.db.base import Base, Database
-from app.services.bailian import BailianEmbeddingProvider
+from app.services.bailian import BailianEmbeddingProvider, BailianRerankProvider
 from app.services.vector_store import QdrantVectorStore
 
 
@@ -37,9 +38,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         else None
     )
     application.state.vector_store = QdrantVectorStore(resolved_settings.qdrant_url)
+    application.state.rerank_provider = (
+        BailianRerankProvider(
+            api_key=resolved_settings.bailian_api_key or "",
+            workspace_id=resolved_settings.bailian_workspace_id or "",
+            model=resolved_settings.rerank_model,
+        )
+        if resolved_settings.model_configured
+        and resolved_settings.bailian_workspace_id
+        else None
+    )
     application.include_router(health_router)
     application.include_router(knowledge_bases_router)
     application.include_router(documents_router)
+    application.include_router(retrieval_router)
     return application
 
 

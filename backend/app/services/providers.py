@@ -6,6 +6,10 @@ class EmbeddingError(RuntimeError):
     pass
 
 
+class RerankError(RuntimeError):
+    pass
+
+
 @dataclass(frozen=True)
 class EmbeddedChunk:
     id: str
@@ -27,6 +31,10 @@ class VectorHit:
 
 class EmbeddingProvider(Protocol):
     def embed(self, texts: list[str]) -> list[list[float]]: ...
+
+
+class RerankProvider(Protocol):
+    def rerank(self, query: str, documents: list[str]) -> list[float]: ...
 
 
 class VectorStore(Protocol):

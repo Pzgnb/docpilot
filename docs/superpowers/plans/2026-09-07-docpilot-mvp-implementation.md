@@ -278,7 +278,7 @@ git commit -m "feat: ingest documents into vector storage"
 - `retrieve(query: str, knowledge_base_id: str, config: RetrievalConfig) -> RetrievalTrace`.
 - `RetrievalHit` fields: `chunk_id`, `knowledge_base_id`, `document_id`, `file_name`, `content`, `vector_score`, `keyword_score`, `fusion_score`, `rerank_score`, `initial_rank`, `final_rank`.
 
-- [ ] **Step 1: Write failing fusion, isolation, and rerank tests**
+- [x] **Step 1: Write failing fusion, isolation, and rerank tests**
 
 ```python
 def test_hybrid_retrieval_exposes_rank_change(retriever):
@@ -292,19 +292,19 @@ def test_retrieval_never_returns_another_knowledge_base(retriever):
     assert {hit.knowledge_base_id for hit in trace.hits} == {"kb-1"}
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_retrieval.py tests/test_retrieval_api.py -v`
 
-- [ ] **Step 3: Implement BM25 keyword scoring, normalized weighted fusion, and Bailian reranking**
+- [x] **Step 3: Implement BM25 keyword scoring, normalized weighted fusion, and Bailian reranking**
 
 Default weights are vector `0.65` and keyword `0.35`; both must be between 0 and 1 and sum to 1. Call `qwen3-rerank` through the workspace-scoped Bailian rerank endpoint only after fusion and preserve every intermediate score in `RetrievalTrace`. When `BAILIAN_WORKSPACE_ID` is absent, return the fusion order with `rerank_status: "not_configured"` instead of pretending reranking occurred.
 
-- [ ] **Step 4: Implement `POST /api/retrieval/debug` and verify GREEN**
+- [x] **Step 4: Implement `POST /api/retrieval/debug` and verify GREEN**
 
 Run: `cd backend; python -m pytest tests/test_retrieval.py tests/test_retrieval_api.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests
