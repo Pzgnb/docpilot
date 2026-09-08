@@ -426,7 +426,7 @@ git commit -m "feat: evaluate retrieval and answer quality"
 - Consumes: all backend APIs and response types defined in Tasks 1-7.
 - Produces: desktop-first routes `/`, `/knowledge-bases/:id`, `/knowledge-bases/:id/chat`, `/knowledge-bases/:id/debug`, and `/knowledge-bases/:id/evaluations`.
 
-- [ ] **Step 1: Scaffold Vite configuration and write failing route/screen tests**
+- [x] **Step 1: Scaffold Vite configuration and write failing route/screen tests**
 
 ```tsx
 it('shows citation source beside an answered message', async () => {
@@ -437,23 +437,23 @@ it('shows citation source beside an answered message', async () => {
 })
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd frontend; npm test -- --run`
 
 Expected: page and component modules cannot be resolved.
 
-- [ ] **Step 3: Implement the shared shell and five focused pages**
+- [x] **Step 3: Implement the shared shell and five focused pages**
 
 Use an original neutral blue-gray interface with one accent color, 16px base text, visible focus states, semantic labels, and a maximum content width of 1440px. The debug page uses a score table; the evaluation page uses summary cards plus a failure table. Do not copy Kotaemon layout or copy.
 
-- [ ] **Step 4: Verify component tests and production build**
+- [x] **Step 4: Verify component tests and production build**
 
 Run: `cd frontend; npm test -- --run`
 
 Run: `cd frontend; npm run build`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add frontend

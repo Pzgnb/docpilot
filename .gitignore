@@ -7,10 +7,7 @@ __pycache__/
 *.egg-info/
 *.db
 data/
-.env
-.venv/
-__pycache__/
-.pytest_cache/
-*.py[cod]
-*.db
-data/
+node_modules/
+dist/
+.npm-cache/
+*.tsbuildinfo
