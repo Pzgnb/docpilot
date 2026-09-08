@@ -474,7 +474,7 @@ git commit -m "feat: add DocPilot product interface"
 **Interfaces:**
 - Produces: `docker compose up --build` with frontend on `http://127.0.0.1:3000`, API on `http://127.0.0.1:8000`, and Qdrant on `http://127.0.0.1:6333`.
 
-- [ ] **Step 1: Add a failing smoke test script**
+- [x] **Step 1: Add a failing smoke test script**
 
 Create `scripts/smoke.ps1` that exits nonzero unless health is OK, one sample file becomes `ready`, one in-document question returns at least one citation, and one unknown question returns `insufficient_context`.
 
@@ -482,11 +482,11 @@ Run: `powershell -ExecutionPolicy Bypass -File scripts/smoke.ps1`
 
 Expected: FAIL because Docker runtime files and running services do not exist.
 
-- [ ] **Step 2: Implement containers, Compose networking, health checks, and sample data**
+- [x] **Step 2: Implement containers, Compose networking, health checks, and sample data**
 
 Use named volumes `docpilot_sqlite` and `docpilot_qdrant`. Mount no source code in the production profile. Pass only environment variable names required by the backend.
 
-- [ ] **Step 3: Run full automated verification**
+- [x] **Step 3: Run full automated verification**
 
 Run: `cd backend; python -m pytest -v`
 
@@ -498,17 +498,17 @@ Run: `docker compose config`
 
 Run: `docker compose up --build -d`
 
-- [ ] **Step 4: Run real Bailian acceptance and capture evidence**
+- [x] **Step 4: Run real Bailian acceptance and capture evidence**
 
 Run: `powershell -ExecutionPolicy Bypass -File scripts/smoke.ps1`
 
 Manually verify the five pages at `http://127.0.0.1:3000`, then save screenshots showing document success, cited answer, refusal, rank change, and evaluation summary under `docs/screenshots/`.
 
-- [ ] **Step 5: Write portfolio README and evidence documents**
+- [x] **Step 5: Write portfolio README and evidence documents**
 
 README sections are: problem, product workflow, features, screenshots, architecture, retrieval design, evaluation results, quick start, environment variables, testing, product decisions, reference disclosure, limitations, and roadmap. `docs/testing.md` records the ten cases and measured results without inventing metrics.
 
-- [ ] **Step 6: Verify public-repository safety**
+- [x] **Step 6: Verify public-repository safety**
 
 Run: `git grep -n -I -E "sk-[A-Za-z0-9_-]{10,}|BAILIAN_API_KEY=.+" -- . ':!.env.example'`
 
@@ -518,7 +518,7 @@ Run: `git status --short`
 
 Expected: only the files intentionally added for this task.
 
-- [ ] **Step 7: Commit and push the verified MVP**
+- [x] **Step 7: Commit and push the verified MVP**
 
 ```bash
 git add .
