@@ -66,7 +66,7 @@ docpilot/
 **Interfaces:**
 - Produces: `create_app() -> FastAPI`, `Settings`, `get_session()`, and `GET /api/health` returning `status`, `database`, `qdrant`, and `models`.
 
-- [ ] **Step 1: Write failing configuration and health tests**
+- [x] **Step 1: Write failing configuration and health tests**
 
 ```python
 def test_settings_allows_local_start_without_bailian_key(monkeypatch):
@@ -81,17 +81,17 @@ def test_health_reports_database_without_exposing_secrets(client):
     assert "api_key" not in response.text.lower()
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_config.py tests/test_health.py -v`
 
 Expected: collection fails because `backend.app` modules do not exist.
 
-- [ ] **Step 3: Implement the minimal app, settings, SQLite session, and health route**
+- [x] **Step 3: Implement the minimal app, settings, SQLite session, and health route**
 
 Use `pydantic-settings` with `BAILIAN_API_KEY`, `BAILIAN_BASE_URL`, `BAILIAN_WORKSPACE_ID`, `CHAT_MODEL`, `EMBEDDING_MODEL`, `RERANK_MODEL`, `DATABASE_URL`, and `QDRANT_URL`. The API key and workspace ID are optional at startup. Return `models: "configured"` only when the API key is non-empty; never return either value.
 
-- [ ] **Step 4: Verify GREEN and start the API once**
+- [x] **Step 4: Verify GREEN and start the API once**
 
 Run: `cd backend; python -m pytest -v`
 
@@ -99,7 +99,7 @@ Run: `cd backend; python -m uvicorn app.main:app --host 127.0.0.1 --port 8000`
 
 Verify: `Invoke-RestMethod http://127.0.0.1:8000/api/health` returns HTTP 200.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add .gitignore .env.example backend
@@ -119,7 +119,7 @@ git commit -m "feat: establish backend foundation"
 - Produces: `POST /api/knowledge-bases`, `GET /api/knowledge-bases`, `GET /api/knowledge-bases/{id}`, and `DELETE /api/knowledge-bases/{id}`.
 - Produces: `KnowledgeBaseRead(id: UUID, name: str, description: str, document_count: int, created_at: datetime, updated_at: datetime)`.
 
-- [ ] **Step 1: Write failing CRUD behavior tests**
+- [x] **Step 1: Write failing CRUD behavior tests**
 
 ```python
 def test_create_and_list_knowledge_base(client):
@@ -135,21 +135,21 @@ def test_duplicate_name_returns_conflict(client):
     assert client.post("/api/knowledge-bases", json=payload).status_code == 409
 ```
 
-- [ ] **Step 2: Run the tests and verify RED**
+- [x] **Step 2: Run the tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_knowledge_bases.py -v`
 
 Expected: requests return 404 because the router does not exist.
 
-- [ ] **Step 3: Implement SQLAlchemy model, schemas, and CRUD router**
+- [x] **Step 3: Implement SQLAlchemy model, schemas, and CRUD router**
 
 Use UUID strings as primary keys, trim names, reject empty names, and convert duplicate-name database errors into `KNOWLEDGE_BASE_EXISTS` with HTTP 409.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run: `cd backend; python -m pytest tests/test_knowledge_bases.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests/test_knowledge_bases.py
@@ -170,7 +170,7 @@ git commit -m "feat: add knowledge base management"
 - Produces: `chunk_text(text: str, document_id: str, chunk_size: int = 600, overlap: int = 100) -> list[TextChunk]`.
 - `TextChunk` fields: `id`, `document_id`, `position`, `content`, `char_start`, `char_end`.
 
-- [ ] **Step 1: Write failing parser tests for TXT, Markdown, DOCX, PDF, and unsupported files**
+- [x] **Step 1: Write failing parser tests for TXT, Markdown, DOCX, PDF, and unsupported files**
 
 ```python
 @pytest.mark.parametrize("fixture_name", ["sample.txt", "sample.md", "sample.docx", "sample.pdf"])
@@ -185,15 +185,15 @@ def test_parse_rejects_executable(tmp_path):
         parse_document(path, "application/octet-stream")
 ```
 
-- [ ] **Step 2: Run parser tests and verify RED**
+- [x] **Step 2: Run parser tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_parsing.py -v`
 
-- [ ] **Step 3: Implement format-specific extraction without OCR**
+- [x] **Step 3: Implement format-specific extraction without OCR**
 
 Use UTF-8 decoding for TXT/Markdown, `python-docx` for DOCX paragraphs and tables, and `pypdf` for text-layer PDFs. Normalize repeated whitespace while preserving paragraph boundaries.
 
-- [ ] **Step 4: Write and run failing chunk boundary tests**
+- [x] **Step 4: Write and run failing chunk boundary tests**
 
 ```python
 def test_chunks_are_ordered_and_overlap():
@@ -202,11 +202,11 @@ def test_chunks_are_ordered_and_overlap():
     assert [c.position for c in chunks] == [0, 1]
 ```
 
-- [ ] **Step 5: Implement chunking and verify all parser/chunk tests**
+- [x] **Step 5: Implement chunking and verify all parser/chunk tests**
 
 Run: `cd backend; python -m pytest tests/test_parsing.py tests/test_chunking.py -v`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add backend/app/services backend/tests
@@ -228,7 +228,7 @@ git commit -m "feat: parse and chunk supported documents"
 - `VectorStore.upsert(chunks: list[EmbeddedChunk]) -> None`, `delete_document(document_id: str) -> None`, and `search(knowledge_base_id: str, vector: list[float], limit: int) -> list[VectorHit]`.
 - Produces upload/list/process/retry/delete document endpoints and statuses `pending`, `processing`, `ready`, `failed`.
 
-- [ ] **Step 1: Write failing lifecycle and ingestion tests using deterministic fakes**
+- [x] **Step 1: Write failing lifecycle and ingestion tests using deterministic fakes**
 
 ```python
 def test_ingestion_marks_ready_only_after_vectors_are_written(session, fake_embedder, fake_store, uploaded_document):
@@ -245,19 +245,19 @@ def test_ingestion_failure_is_retryable(session, failing_embedder, fake_store, u
     assert uploaded_document.error_code == "EMBEDDING_FAILED"
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_documents.py tests/test_ingestion.py -v`
 
-- [ ] **Step 3: Implement provider protocols, Bailian embedding batching, Qdrant adapter, and lifecycle transaction**
+- [x] **Step 3: Implement provider protocols, Bailian embedding batching, Qdrant adapter, and lifecycle transaction**
 
 Batch at most 10 texts per `text-embedding-v4` request. Store Qdrant payload fields `knowledge_base_id`, `document_id`, `chunk_id`, `position`, and `content`. On retry, delete stale chunks and vectors before reprocessing.
 
-- [ ] **Step 4: Verify GREEN and deletion consistency**
+- [x] **Step 4: Verify GREEN and deletion consistency**
 
 Run: `cd backend; python -m pytest tests/test_documents.py tests/test_ingestion.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests
@@ -278,7 +278,7 @@ git commit -m "feat: ingest documents into vector storage"
 - `retrieve(query: str, knowledge_base_id: str, config: RetrievalConfig) -> RetrievalTrace`.
 - `RetrievalHit` fields: `chunk_id`, `knowledge_base_id`, `document_id`, `file_name`, `content`, `vector_score`, `keyword_score`, `fusion_score`, `rerank_score`, `initial_rank`, `final_rank`.
 
-- [ ] **Step 1: Write failing fusion, isolation, and rerank tests**
+- [x] **Step 1: Write failing fusion, isolation, and rerank tests**
 
 ```python
 def test_hybrid_retrieval_exposes_rank_change(retriever):
@@ -292,19 +292,19 @@ def test_retrieval_never_returns_another_knowledge_base(retriever):
     assert {hit.knowledge_base_id for hit in trace.hits} == {"kb-1"}
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_retrieval.py tests/test_retrieval_api.py -v`
 
-- [ ] **Step 3: Implement BM25 keyword scoring, normalized weighted fusion, and Bailian reranking**
+- [x] **Step 3: Implement BM25 keyword scoring, normalized weighted fusion, and Bailian reranking**
 
 Default weights are vector `0.65` and keyword `0.35`; both must be between 0 and 1 and sum to 1. Call `qwen3-rerank` through the workspace-scoped Bailian rerank endpoint only after fusion and preserve every intermediate score in `RetrievalTrace`. When `BAILIAN_WORKSPACE_ID` is absent, return the fusion order with `rerank_status: "not_configured"` instead of pretending reranking occurred.
 
-- [ ] **Step 4: Implement `POST /api/retrieval/debug` and verify GREEN**
+- [x] **Step 4: Implement `POST /api/retrieval/debug` and verify GREEN**
 
 Run: `cd backend; python -m pytest tests/test_retrieval.py tests/test_retrieval_api.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests
@@ -325,7 +325,7 @@ git commit -m "feat: add explainable hybrid retrieval"
 - `answer_question(request: ChatRequest) -> ChatResponse`.
 - `ChatResponse` fields: `answer`, `decision` (`answer` or `insufficient_context`), `citations`, `retrieval_trace_id`, and `created_at`.
 
-- [ ] **Step 1: Write failing answer, citation, and refusal tests**
+- [x] **Step 1: Write failing answer, citation, and refusal tests**
 
 ```python
 def test_low_score_refuses_without_calling_chat(answering_service, fake_chat):
@@ -339,19 +339,19 @@ def test_answer_citations_are_limited_to_supplied_chunks(answering_service):
     assert {c.chunk_id for c in result.citations} <= {h.chunk_id for h in known_hits()}
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_answering.py tests/test_chat_api.py -v`
 
-- [ ] **Step 3: Implement threshold gate, structured model output, citation validation, and chat persistence**
+- [x] **Step 3: Implement threshold gate, structured model output, citation validation, and chat persistence**
 
 The system prompt requires JSON fields `answer` and `citation_ids`. Reject unknown citation IDs instead of displaying them. Refusal text is fixed product copy, not generated by the model.
 
-- [ ] **Step 4: Verify GREEN**
+- [x] **Step 4: Verify GREEN**
 
 Run: `cd backend; python -m pytest tests/test_answering.py tests/test_chat_api.py -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests
@@ -373,7 +373,7 @@ git commit -m "feat: answer with verified citations"
 - Error values: `none`, `not_retrieved`, `ranked_too_low`, `answer_omission`, `wrong_citation`, `wrong_refusal`.
 - Produces create/list/delete case endpoints and `POST /api/evaluations/run` returning totals, pass rate, and per-case results.
 
-- [ ] **Step 1: Write failing tests for every error category**
+- [x] **Step 1: Write failing tests for every error category**
 
 ```python
 @pytest.mark.parametrize(
@@ -391,19 +391,19 @@ def test_error_classification(evaluation_fixtures, fixture_name, expected_error)
     assert evaluate_case(case, response, trace).error_type == expected_error
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd backend; python -m pytest tests/test_evaluation.py tests/test_evaluation_api.py -v`
 
-- [ ] **Step 3: Implement rules, persistence, batch execution, and ten synthetic demo cases**
+- [x] **Step 3: Implement rules, persistence, batch execution, and ten synthetic demo cases**
 
 Pass requires the expected document in the configured top rank, all required keywords in the answer, only expected citations, and the expected refusal decision. Store the retrieval trace for every failure.
 
-- [ ] **Step 4: Verify GREEN and full backend regression suite**
+- [x] **Step 4: Verify GREEN and full backend regression suite**
 
 Run: `cd backend; python -m pytest -v`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/app backend/tests sample-data
@@ -426,7 +426,7 @@ git commit -m "feat: evaluate retrieval and answer quality"
 - Consumes: all backend APIs and response types defined in Tasks 1-7.
 - Produces: desktop-first routes `/`, `/knowledge-bases/:id`, `/knowledge-bases/:id/chat`, `/knowledge-bases/:id/debug`, and `/knowledge-bases/:id/evaluations`.
 
-- [ ] **Step 1: Scaffold Vite configuration and write failing route/screen tests**
+- [x] **Step 1: Scaffold Vite configuration and write failing route/screen tests**
 
 ```tsx
 it('shows citation source beside an answered message', async () => {
@@ -437,23 +437,23 @@ it('shows citation source beside an answered message', async () => {
 })
 ```
 
-- [ ] **Step 2: Run tests and verify RED**
+- [x] **Step 2: Run tests and verify RED**
 
 Run: `cd frontend; npm test -- --run`
 
 Expected: page and component modules cannot be resolved.
 
-- [ ] **Step 3: Implement the shared shell and five focused pages**
+- [x] **Step 3: Implement the shared shell and five focused pages**
 
 Use an original neutral blue-gray interface with one accent color, 16px base text, visible focus states, semantic labels, and a maximum content width of 1440px. The debug page uses a score table; the evaluation page uses summary cards plus a failure table. Do not copy Kotaemon layout or copy.
 
-- [ ] **Step 4: Verify component tests and production build**
+- [x] **Step 4: Verify component tests and production build**
 
 Run: `cd frontend; npm test -- --run`
 
 Run: `cd frontend; npm run build`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add frontend
@@ -474,7 +474,7 @@ git commit -m "feat: add DocPilot product interface"
 **Interfaces:**
 - Produces: `docker compose up --build` with frontend on `http://127.0.0.1:3000`, API on `http://127.0.0.1:8000`, and Qdrant on `http://127.0.0.1:6333`.
 
-- [ ] **Step 1: Add a failing smoke test script**
+- [x] **Step 1: Add a failing smoke test script**
 
 Create `scripts/smoke.ps1` that exits nonzero unless health is OK, one sample file becomes `ready`, one in-document question returns at least one citation, and one unknown question returns `insufficient_context`.
 
@@ -482,11 +482,11 @@ Run: `powershell -ExecutionPolicy Bypass -File scripts/smoke.ps1`
 
 Expected: FAIL because Docker runtime files and running services do not exist.
 
-- [ ] **Step 2: Implement containers, Compose networking, health checks, and sample data**
+- [x] **Step 2: Implement containers, Compose networking, health checks, and sample data**
 
 Use named volumes `docpilot_sqlite` and `docpilot_qdrant`. Mount no source code in the production profile. Pass only environment variable names required by the backend.
 
-- [ ] **Step 3: Run full automated verification**
+- [x] **Step 3: Run full automated verification**
 
 Run: `cd backend; python -m pytest -v`
 
@@ -498,17 +498,17 @@ Run: `docker compose config`
 
 Run: `docker compose up --build -d`
 
-- [ ] **Step 4: Run real Bailian acceptance and capture evidence**
+- [x] **Step 4: Run real Bailian acceptance and capture evidence**
 
 Run: `powershell -ExecutionPolicy Bypass -File scripts/smoke.ps1`
 
 Manually verify the five pages at `http://127.0.0.1:3000`, then save screenshots showing document success, cited answer, refusal, rank change, and evaluation summary under `docs/screenshots/`.
 
-- [ ] **Step 5: Write portfolio README and evidence documents**
+- [x] **Step 5: Write portfolio README and evidence documents**
 
 README sections are: problem, product workflow, features, screenshots, architecture, retrieval design, evaluation results, quick start, environment variables, testing, product decisions, reference disclosure, limitations, and roadmap. `docs/testing.md` records the ten cases and measured results without inventing metrics.
 
-- [ ] **Step 6: Verify public-repository safety**
+- [x] **Step 6: Verify public-repository safety**
 
 Run: `git grep -n -I -E "sk-[A-Za-z0-9_-]{10,}|BAILIAN_API_KEY=.+" -- . ':!.env.example'`
 
@@ -518,7 +518,7 @@ Run: `git status --short`
 
 Expected: only the files intentionally added for this task.
 
-- [ ] **Step 7: Commit and push the verified MVP**
+- [x] **Step 7: Commit and push the verified MVP**
 
 ```bash
 git add .
